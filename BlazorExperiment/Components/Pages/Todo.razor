@@ -1,0 +1,60 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<PageTitle>To-do List</PageTitle>
+<h3>Todo</h3>
+
+<div class="content">
+    <input @bind="todoName" placeholder="Name" />
+    <input @bind="todoDescription" placeholder="Description" />
+    <InputSelect @bind-Value="todoPriority">
+        @foreach (var priority in Enum.GetValues(typeof(Priority)))
+        {
+            <option value="@priority">@priority</option>
+        }
+    </InputSelect>
+    <button class="button" @onclick="AddTodoToTodo">Add Item</button>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Priority</th>
+            <th><button class="button" @onclick="DeleteSelected">Delete Selected</button></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in todoItems)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Priority.ToString()</td>
+                <td><input type="checkbox" @bind="item.IsDone"/></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<TodoItem> todoItems = new();
+    string todoName = "";
+    string todoDescription = "";
+    Priority todoPriority = Priority.Low;
+
+    void AddTodoToTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(todoName) && !string.IsNullOrWhiteSpace(todoDescription))
+        { 
+            todoItems.Add(new TodoItem { Title = todoName, Description = todoDescription, Priority = todoPriority });
+        }
+    }
+
+    void DeleteSelected()
+    {
+        todoItems.RemoveAll(item => item.IsDone == true);
+    }
+}
