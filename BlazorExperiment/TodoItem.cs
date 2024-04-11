@@ -6,7 +6,6 @@
         public bool IsDone { get; set; }
         public string? Description { get; set; }
         public Priority? Priority { get; set; }
-
     }
 
     public enum Priority
