@@ -1,0 +1,42 @@
+﻿@page "/cs2"
+@rendermode InteractiveServer
+
+
+<PageTitle>Counter-Strike</PageTitle>
+<h1>Competitiveness, Statistics and Counter-Strike</h1>
+
+<p>In my free time, since around 2019, i've been following competitive Counter-Strike, both playing on a semi-professional team, and following the sport in general.</p>
+<p>In Counter-Strike, one website stands above the rest, as the go-to source for articles, statistics, and so on. That's HLTV. However, sadly, HLTV doesn't have an API, so, to get any data directly from them, you have to scrape it.</p>
+
+<p>So, i made a scraper. Or, rather, i learned a library for scraping. Other attempts to do the same have also been on GitHub, with API's, but they also scraped it, and most of them were deprecated</p>
+<p>In any case, Twistzz has been one of my favorite players for a long time, so below, you can see his stats from the last 3 months of play</p>
+
+@*This is the way it is, because using @twistzzObject, causes the page to load indefinetely*@
+<div id="playerProfile">
+    @htmlContent
+</div>
+
+
+@*I'm just not a front-end dev, and while im well aware this way of doing this doesnt allow for more text, and depends on the img tags fixed size, this is the way i'll leave it for now.
+  It gives me a way to represent the back-end, while not being too ugly.
+*@
+<p style="position: fixed; padding-top: 500px;float: left">Or, that's what i would say if this worked while being hosted on an Azure server. They dont allow for chrome instances, so we'd need a remote browser instance</p>
+<p style="position: fixed; padding-top: 530px;float: left">The only free one i could find was browsercloud.io, and sadly, their service doesn't get past Cloudflare, even for a single request</p>
+<p style="position: fixed; padding-top: 560px;float: left">If you really, really want to see it run, you can download this entire Blazor Web App, over on <a href='https://github.com/pSlessing/BlazorPortfolio'>GitHub</a></p>
+@code {
+    private MarkupString htmlContent = new MarkupString("<h1>Data is loading...</h1>");
+
+    CsPlayer twistzzObject = new CsPlayer();
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            twistzzObject = await HLTVScraper.GetTwistzzStats();
+
+            string dataTemplate = "<div id=\"main-container\">  <div id=\"right-container\"     style=\"display: inline-block; float: left;\"> <img src=\"{0}\" height=\"400\" width=\"400\"></img>     <h1>{1}</h1>  </div>    <div id=\"playerstats\" style=\"display: inline-block; float: left;\"> <h1>{2}</h1>   <h3>Rating: {3}</h3>  <h3>Kills per Round: {4}</h3>  <h3>Headshots: {5}</h3>  <h3>Maps played: {6}</h3>  <h3>Deaths per round: {7}</h3>  <h3>Rounds contributed: {8}</h3>    </div></div>";
+            htmlContent = new MarkupString(string.Format(dataTemplate, twistzzObject.imgSource, twistzzObject.playerName, twistzzObject.playerTag, twistzzObject.rating, twistzzObject.killsPerRound, twistzzObject.headshotPercentage, twistzzObject.mapsPlayed, twistzzObject.deathsPerRound, twistzzObject.roundsContributed));
+            StateHasChanged();
+        }
+
+    }
+ }
