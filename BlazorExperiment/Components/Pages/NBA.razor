@@ -5,6 +5,21 @@
 
 @code
 {
-    BallDontLieAPI BdlAPI = new BallDontLieAPI("19cad8bd-dd85-4925-8e97-f66f8e48a1d8");
+    BallDontLieAPI ApiAccess = new BallDontLieAPI("19cad8bd-dd85-4925-8e97-f66f8e48a1d8");
+    NbaPlayer curry = new NbaPlayer();
+    NbaTeam warriors = new NbaTeam();
+    NbaMatch wsvslakers = new NbaMatch();
 
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            curry = await ApiAccess.getNbaPlayer(19);
+            //warriors = await ApiAccess.getNbaTeam(1);
+            //wsvslakers = await ApiAccess.getNbaMatch(1);
+        }
+
+    }
 }
