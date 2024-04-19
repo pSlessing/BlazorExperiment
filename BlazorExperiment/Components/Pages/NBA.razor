@@ -16,7 +16,7 @@
     {
         if (firstRender)
         {
-            curry = await ApiAccess.getNbaPlayer(19);
+            curry = await ApiAccess.getNbaPlayerByID(19);
             System.Diagnostics.Debug.WriteLine(curry.first_name);
             System.Diagnostics.Debug.WriteLine(curry.last_name);
             System.Diagnostics.Debug.WriteLine(curry.id);

@@ -19,7 +19,7 @@ namespace BlazorExperiment
             client.BaseAddress = new Uri(baseURL);
         }
 
-        public async Task<NbaPlayer?> getNbaPlayer(int input) 
+        public async Task<NbaPlayer?> getNbaPlayerByID(int input) 
         {
             accessPointUrl = "players/";
             System.Diagnostics.Debug.WriteLine(accessPointUrl);
@@ -27,20 +27,23 @@ namespace BlazorExperiment
             var responseBody = await response.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine(responseBody);
 
-            NbaPlayer? returnPlayer = JsonConvert.DeserializeObject<Root>(responseBody).data;
+            NbaPlayer? returnPlayer = JsonConvert.DeserializeObject<RootPlayer>(responseBody).data;
 
             return returnPlayer;
             
         }
         
-        public async Task<NbaTeam> getNbaTeam(int input) 
+        public async Task<NbaTeam> getNbaTeamByID(int input) 
         {
             accessPointUrl = "teams/";
             System.Diagnostics.Debug.WriteLine(accessPointUrl);
             var response = await client.GetAsync(accessPointUrl + input.ToString());
             var responseBody = await response.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine(responseBody);
-            NbaTeam returnTeam = new NbaTeam();
+
+
+
+            NbaTeam returnTeam = JsonConvert.DeserializeObject<RootTeam>(responseBody).data;
 
             return returnTeam;
         }
@@ -52,16 +55,26 @@ namespace BlazorExperiment
             var response = await client.GetAsync(accessPointUrl + input.ToString());
             var responseBody = await response.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine(responseBody);
-            NbaMatch returnMatch = new NbaMatch();
+            NbaMatch returnMatch = JsonConvert.DeserializeObject<RootMatch>(responseBody).data;
 
             return returnMatch;
         }
     }
 
 
-    public class Root
+    public class RootPlayer
     {
         public NbaPlayer data { get; set; }
+    }
+
+    public class RootTeam
+    {
+        public NbaTeam data { get; set; }
+    }
+
+    public class RootMatch
+    {
+        public NbaMatch data { get; set; }
     }
 
     public class NbaPlayer 
