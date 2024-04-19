@@ -17,6 +17,10 @@
         if (firstRender)
         {
             curry = await ApiAccess.getNbaPlayer(19);
+            System.Diagnostics.Debug.WriteLine(curry.first_name);
+            System.Diagnostics.Debug.WriteLine(curry.last_name);
+            System.Diagnostics.Debug.WriteLine(curry.id);
+            System.Diagnostics.Debug.WriteLine(curry.height);
             //warriors = await ApiAccess.getNbaTeam(1);
             //wsvslakers = await ApiAccess.getNbaMatch(1);
         }
